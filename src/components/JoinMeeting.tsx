@@ -41,7 +41,7 @@ const JoinMeeting: React.FC<JoinMeetingProps> = ({ onNavigate, meetingCode }) =>
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/api/meetings/${meetingCode}`);
+      const response = await fetch(`/api/meetings/${meetingCode}`);
       if (response.ok) {
         const data = await response.json();
         setMeeting(data);
@@ -67,7 +67,7 @@ const JoinMeeting: React.FC<JoinMeetingProps> = ({ onNavigate, meetingCode }) =>
     if (!participantName.trim() || !meeting) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/api/meetings/${meeting.id}/vote`, {
+      const response = await fetch(`/api/meetings/${meeting.id}/vote`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

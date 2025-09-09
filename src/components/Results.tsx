@@ -60,7 +60,7 @@ const Results: React.FC<ResultsProps> = ({ onNavigate, meetingCode }) => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/api/meetings/${meetingCode}/results`);
+      const response = await fetch(`/api/meetings/${meetingCode}/results`);
       if (response.ok) {
         const data = await response.json();
         setResults(data);

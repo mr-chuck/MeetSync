@@ -25,7 +25,7 @@ const CreateMeeting: React.FC<CreateMeetingProps> = ({ onNavigate }) => {
     if (selectedTimeSlots.length === 0) return;
 
     try {
-      const response = await fetch('http://localhost:3001/api/meetings', {
+      const response = await fetch('/api/meetings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
