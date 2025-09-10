@@ -1,25 +1,20 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc.js';
-import timezone from 'dayjs/plugin/timezone.js';
+// api/meetings.js
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-// Simple in-memory storage (works for demo, use database for production)
-const getMeetings = () => {
-  if (typeof global !== 'undefined') {
-    global.meetings = global.meetings || {};
-    return global.meetings;
-  }
-  return {};
-};
+// Simple in-memory storage
+let meetings = {};
 
 // Generate random 6-character code
 function generateCode() {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
-export default function handler(req, res) {
+module.exports = (req, res) => {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -31,7 +26,6 @@ export default function handler(req, res) {
   }
 
   if (req.method === 'GET') {
-    const meetings = getMeetings();
     res.json(meetings);
     return;
   }
@@ -58,7 +52,6 @@ export default function handler(req, res) {
       meeting.votes[slot] = [];
     });
 
-    const meetings = getMeetings();
     meetings[code] = meeting;
     
     res.json({ 
@@ -70,4 +63,4 @@ export default function handler(req, res) {
   }
 
   res.status(405).json({ error: 'Method not allowed' });
-}
+};
