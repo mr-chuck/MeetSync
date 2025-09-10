@@ -1,11 +1,3 @@
-// api/meetings.js
-const dayjs = require('dayjs');
-const utc = require('dayjs/plugin/utc');
-const timezone = require('dayjs/plugin/timezone');
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-
 // Simple in-memory storage
 let meetings = {};
 
@@ -14,7 +6,7 @@ function generateCode() {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
-module.exports = (req, res) => {
+export default function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -44,7 +36,7 @@ module.exports = (req, res) => {
       timeSlots,
       participants: [],
       votes: {},
-      createdAt: dayjs().tz('America/Los_Angeles').toISOString()
+      createdAt: new Date().toISOString()
     };
 
     // Initialize vote counts for each time slot
@@ -57,10 +49,10 @@ module.exports = (req, res) => {
     res.json({ 
       code,
       meeting,
-      joinUrl: `${req.headers.origin || 'https://meetsync-nine.vercel.app'}`
+      joinUrl: `https://meetsync-nine.vercel.app`
     });
     return;
   }
 
   res.status(405).json({ error: 'Method not allowed' });
-};
+}
