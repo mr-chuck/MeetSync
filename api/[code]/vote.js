@@ -1,17 +1,5 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc.js';
-import timezone from 'dayjs/plugin/timezone.js';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-
-const getMeetings = () => {
-  if (typeof global !== 'undefined') {
-    global.meetings = global.meetings || {};
-    return global.meetings;
-  }
-  return {};
-};
+// Simple in-memory storage
+let meetings = {};
 
 function getBestSlots(meeting) {
   if (meeting.participants.length === 0) return [];
@@ -44,7 +32,6 @@ export default function handler(req, res) {
       return res.status(400).json({ error: 'Participant name and available slots are required' });
     }
 
-    const meetings = getMeetings();
     const meeting = meetings[code.toUpperCase()];
     if (!meeting) {
       return res.status(404).json({ error: 'Meeting not found' });
@@ -53,15 +40,13 @@ export default function handler(req, res) {
     // Remove existing votes from this participant
     const existingParticipant = meeting.participants.find(p => p.name === participantName);
     if (existingParticipant) {
-      // Remove previous votes
       Object.keys(meeting.votes).forEach(slot => {
         meeting.votes[slot] = meeting.votes[slot].filter(voter => voter !== participantName);
       });
     } else {
-      // Add new participant
       meeting.participants.push({
         name: participantName,
-        joinedAt: dayjs().tz('America/Los_Angeles').toISOString()
+        joinedAt: new Date().toISOString()
       });
     }
 

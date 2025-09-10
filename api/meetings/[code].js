@@ -1,10 +1,5 @@
-const getMeetings = () => {
-  if (typeof global !== 'undefined') {
-    global.meetings = global.meetings || {};
-    return global.meetings;
-  }
-  return {};
-};
+// Simple in-memory storage
+let meetings = {};
 
 export default function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -18,7 +13,6 @@ export default function handler(req, res) {
 
   if (req.method === 'GET') {
     const { code } = req.query;
-    const meetings = getMeetings();
     const meeting = meetings[code.toUpperCase()];
     
     if (!meeting) {
