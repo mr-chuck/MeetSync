@@ -1,5 +1,7 @@
 // API service for meeting management
-const API_BASE_URL = 'https://api.meetsync.app'; // Replace with actual API endpoint
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? '' // Use relative URLs in production (same domain)
+  : ''; // Also use relative URLs in development when deployed
 
 export interface Meeting {
   id: string;
